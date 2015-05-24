@@ -105,3 +105,21 @@ class SomeService
     myCursor = Fe.tree.select('someBranch','someLeaf')
     myCursor.set('New Data')
 ```
+
+Running the example
+-------------------
+
+The quickest way (at least on linux / OSX) is to use docker and docker-compose.
+
+```
+cd example
+docker-compose up -d
+```
+
+Then visit localhost:9000
+
+When you're done run
+
+```
+docker-compose stop
+```

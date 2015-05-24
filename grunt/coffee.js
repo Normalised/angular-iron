@@ -10,5 +10,14 @@ module.exports = {
       dest:'.tmp',
       ext:'.js'
     }]
+  },
+  example: {
+    files: [{
+      expand: true,
+      cwd: 'example',
+      src: '**/*.coffee',
+      dest: 'example',
+      ext: '.js'
+    }]
   }
 };
