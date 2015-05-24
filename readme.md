@@ -91,3 +91,17 @@ class SomeRouteController
 
 app.controller 'SomeRouteController', SomeRouteController
 ```
+
+To update data in the tree just inject 'Fe' and use the Fe.tree property.
+
+```CoffeeScript
+
+app = angular.module 'myAngularApp'
+
+class SomeService
+
+  @$inject: ['Fe']
+  constructor: (Fe) ->
+    myCursor = Fe.tree.select('someBranch','someLeaf')
+    myCursor.set('New Data')
+```

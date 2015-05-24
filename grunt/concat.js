@@ -3,7 +3,7 @@ module.exports = {
     separator: ';'
   },
   dist: {
-    src: ['bower_components/baobab/src/baobab.js','.tmp/**/*.js'],
+    src: ['bower_components/baobab/build/baobab.min.js','.tmp/**/*.js'],
     dest: '.tmp/concat/angular-iron.js'
   }
 };

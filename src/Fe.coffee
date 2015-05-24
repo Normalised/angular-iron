@@ -14,9 +14,10 @@ mod.provider('Fe', () ->
   @setTreeConfig = (cfg) =>
     config = cfg;
 
-  @$get = () ->
-    stateTree = new Baobab(config.data, config.options)
+  @$get = ['baobab', (baobab) ->
+    stateTree = baobab.create(config.data, config.options)
     return new Fe(stateTree)
+  ]
 
   return @
 )
