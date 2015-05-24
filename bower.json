@@ -1,0 +1,9 @@
+{
+  "name": "angular-iron",
+  "version": "0.0.1",
+  "main":"dist/angular-iron.js",
+  "ignore":["docs","grunt","src","test",".editorconfig",".gitattributes",".gitignore",".jshintrc","Gruntfile.js","docker-compose.yml"],
+  "dependencies": {
+    "baobab": "~1.1.0"
+  }
+}
