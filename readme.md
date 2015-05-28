@@ -101,9 +101,8 @@ class SomeService
     myCursor.set('New Data')
 ```
 
-If you only use the state data in the template (i.e. just copying from state to scope) you don't have to supply an 
-update method for the 3rd parameter, just leave it and a default updater will be applied which just copies from
-state to scope
+If you only use the state data in the template, i.e. copying from state to scope, you don't have to supply an 
+update method for the 3rd parameter.
 
 ```CoffeeScript
 class SomeOtherController
@@ -118,7 +117,7 @@ app.controller 'SomeOtherController', SomeOtherController
 ```
 
 Finally, there is a preliminary implementation of a generic directive 'fe-shirt' which can be used if your directive 
-template just uses data straight from state and doesn't do anything else like invoking actions.
+template only uses data straight from state and doesn't do anything else like invoking actions.
 
 The simplest form for fe-shirt is :
 
