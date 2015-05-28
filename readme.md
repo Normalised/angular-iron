@@ -101,6 +101,32 @@ class SomeService
     myCursor.set('New Data')
 ```
 
+If you only use the state data in the template (i.e. just copying from state to scope) you don't have to supply an 
+update method for the 3rd parameter, just leave it and a default updater will be applied which just copies from
+state to scope
+
+```CoffeeScript
+class SomeOtherController
+
+  @$inject: ['$scope','Fe']
+  constructor: (@$scope, Fe) ->
+    # State from facet / cursor 'myView' will be copied into scope
+    # whenever the state is updated
+    Fe.dress(@$scope, 'myView')
+
+app.controller 'SomeOtherController', SomeOtherController
+```
+
+Finally, there is a preliminary implementation of a generic directive 'fe-shirt'
+
+```html
+<div fe-shirt path="facetName" template="/path/to/template.html">
+```
+
+Which can be used if your directive template just uses data straight from state and doesn't do anything else like 
+invoking actions.
+
+
 Running the example
 -------------------
 
