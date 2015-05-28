@@ -1,6 +1,6 @@
 {
   "name": "angular-iron",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main":"dist/angular-iron.js",
   "ignore":["docs","grunt","src","test",".editorconfig",".gitattributes",".gitignore",".jshintrc","Gruntfile.js","docker-compose.yml"],
   "dependencies": {
