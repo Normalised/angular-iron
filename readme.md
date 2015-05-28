@@ -15,6 +15,8 @@ bower install angular-iron --save
 Usage
 -----
 
+*All code examples are CoffeeScript*
+
 Add 'angular-iron' to your app dependencies
 
 ```CoffeeScript
@@ -90,17 +92,6 @@ class SomeRouteController
 app.controller 'SomeRouteController', SomeRouteController
 ```
 
-To update data in the tree just inject 'Fe' and use the Fe.tree property.
-
-```CoffeeScript
-class SomeService
-
-  @$inject: ['Fe']
-  constructor: (Fe) ->
-    myCursor = Fe.tree.select('someBranch','someLeaf')
-    myCursor.set('New Data')
-```
-
 If you only use the state data in the template, i.e. copying from state to scope, you don't have to supply an 
 update method for the 3rd parameter.
 
@@ -115,6 +106,23 @@ class SomeOtherController
 
 app.controller 'SomeOtherController', SomeOtherController
 ```
+
+Mutating the state tree
+-----------------------
+
+To update data in the tree just inject 'Fe' and use the Fe.tree property.
+
+```CoffeeScript
+class SomeService
+
+  @$inject: ['Fe']
+  constructor: (Fe) ->
+    myCursor = Fe.tree.select('someBranch','someLeaf')
+    myCursor.set('New Data')
+```
+
+Iron Shirt Directive
+--------------------
 
 Finally, there is a preliminary implementation of a generic directive 'fe-shirt' which can be used if your directive 
 template only uses data straight from state and doesn't do anything else like invoking actions.
