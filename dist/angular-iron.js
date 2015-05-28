@@ -12,7 +12,7 @@
     }
 
     Fe.prototype.dress = function(scope, facetName, renderMethod) {
-      return angular.extend(this.dress.caller, new IronShirt(facetName, scope, renderMethod, this.tree));
+      return angular.extend(this.dress.caller, new IronShirt(this.tree, facetName, scope, renderMethod));
     };
 
     return Fe;
@@ -41,10 +41,20 @@
   });
 
   IronShirt = (function() {
-    function IronShirt(facet, $scope, renderMethod1, tree) {
-      var ironState;
-      this.renderMethod = renderMethod1;
+    function IronShirt(tree, facet, $scope, renderMethod) {
       this.stateChanged = bind(this.stateChanged, this);
+      var ironState;
+      if (renderMethod) {
+        this.renderMethod = renderMethod;
+      } else {
+        this.renderMethod = (function(_this) {
+          return function(state) {
+            return _.forIn(state, function(value, key) {
+              return $scope[key] = value;
+            });
+          };
+        })(this);
+      }
       if (tree.facets[facet]) {
         ironState = tree.facets[facet];
       } else {
