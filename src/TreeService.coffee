@@ -16,6 +16,7 @@ class BaobabService
     tree = new Baobab(tree, options)
 
     timeoutFn = () =>
+      console.log('Apply Root Scope')
       @$rootScope.$apply()
 
     tree.on 'update', () ->

@@ -79,6 +79,36 @@
 
   })();
 
+  mod.directive('feShirt', [
+    'Fe', function(Fe) {
+      return {
+        restrict: 'AE',
+        scope: {},
+        link: function(scope, element, attrs) {
+          var render;
+          console.log('Link Fe.Shirt', scope, element, attrs);
+          if (!attrs.path) {
+            console.error('path attribute must be supplied', scope, element, attrs);
+          }
+          render = function(state) {
+            return _.forIn(state, function(value, key) {
+              return scope[key] = value;
+            });
+          };
+          return Fe.dress(scope, attrs.path, render);
+        },
+        templateUrl: function(element, attrs) {
+          console.log('Template Fe.Shirt', element, attrs);
+          if (!attrs.template) {
+            console.error('template attribute must be supplied', element, attrs);
+            return '';
+          }
+          return attrs.template;
+        }
+      };
+    }
+  ]);
+
 }).call(this);
 ;(function() {
   var BaobabService, mod,
@@ -103,6 +133,7 @@
       tree = new Baobab(tree, options);
       timeoutFn = (function(_this) {
         return function() {
+          console.log('Apply Root Scope');
           return _this.$rootScope.$apply();
         };
       })(this);

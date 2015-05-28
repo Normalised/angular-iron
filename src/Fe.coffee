@@ -49,3 +49,29 @@ class IronShirt
   stateChanged: (event) =>
     state = event.target.get()
     @renderMethod(state)
+
+
+# Generic Directive
+
+mod.directive 'feShirt', ['Fe', (Fe) ->
+  return {
+    restrict: 'AE'
+    scope: {}
+    link: (scope, element, attrs) ->
+      console.log('Link Fe.Shirt', scope, element, attrs)
+      if not attrs.path
+        console.error 'path attribute must be supplied', scope, element, attrs
+      render = (state) ->
+        _.forIn state, (value, key) ->
+          scope[key] = value
+
+      Fe.dress(scope,attrs.path, render)
+
+    templateUrl: (element, attrs) ->
+      console.log('Template Fe.Shirt', element, attrs)
+      if not attrs.template
+        console.error 'template attribute must be supplied', element, attrs
+        return ''
+      return attrs.template
+  }
+]
