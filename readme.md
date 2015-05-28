@@ -117,15 +117,31 @@ class SomeOtherController
 app.controller 'SomeOtherController', SomeOtherController
 ```
 
-Finally, there is a preliminary implementation of a generic directive 'fe-shirt'
+Finally, there is a preliminary implementation of a generic directive 'fe-shirt' which can be used if your directive 
+template just uses data straight from state and doesn't do anything else like invoking actions.
+
+The simplest form for fe-shirt is :
+
+```html
+<div fe-shirt="someName">
+```
+In this case the attribute is used for both the facet / cursor name AND for the template (by appending .html to the name)
+
+Template locations can be configured via the FeProvider :
+
+```CoffeeScript
+FeProvider.setTemplateRoot('/my/template/path/')
+```
+
+Both the data path and template can be configured separately via the path and template attributes :
 
 ```html
 <div fe-shirt path="facetName" template="/path/to/template.html">
 ```
 
-Which can be used if your directive template just uses data straight from state and doesn't do anything else like 
-invoking actions.
+If the template attribute is not supplied the path attribute is checked and then the fe-shirt attribute.
 
+NOTE : If any setting for template doesnt contain .html it will be appended to the template name
 
 Running the example
 -------------------

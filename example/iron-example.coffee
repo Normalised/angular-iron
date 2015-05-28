@@ -4,22 +4,33 @@ app = angular.module 'fe.example', [
 
 # -------- Baobab Tree ----------
 app.constant 'fe.example.treeSource', {
- data: {
-   a: 'Waiting for a click...'
-   b: 'Some Other Data'
- }
- options: {
-   facets : {
-     facetA: {
-       cursors: {
-         foo: ['a']
-         bar: ['b']
-       }
-       get : (data) ->
-         return data
-     }
-   }
- }
+  data: {
+    currentDate: 'Dont know yet. Click the button'
+    theWeather: 'Its raining.'
+    username: 'Normalised'
+  }
+  options: {
+    facets: {
+      today: {
+        cursors: {
+          # In this case the facet just aliases the properties with new names
+          date: ['currentDate']
+          weather: ['theWeather']
+        }
+        get: (data) ->
+          # You can manipulate the data however you like here
+          return data
+      }
+      userProfile: {
+        cursors: {
+          name:['username']
+        }
+        get: (data) ->
+          data.name = "Mr." + data.name
+          return data
+      }
+    }
+  }
 }
 
 # ------ UI Actions ------
@@ -28,7 +39,7 @@ class FeExampleActions
   @$inject: ['Fe','$log']
   constructor: (Fe, @log) ->
     @log.log('Create Example Actions')
-    @cursor = Fe.tree.select('a')
+    @cursor = Fe.tree.select('currentDate')
 
   changeState: () =>
     @log.log('Change state')
@@ -43,13 +54,11 @@ class FeExampleController
   @$inject: ['Fe','$scope','fe.example.actions','$log']
   constructor: (Fe, @$scope, @uiActions, @log) ->
     @log.log('Create Example Controller')
-    Fe.dress(@$scope,'facetA',@render)
-    @$scope.doClick = @uiActions.changeState
 
-  render: (state) =>
-    @log.log('Render State',state)
-    @$scope.foo = state.foo
-    @$scope.bar = state.bar
+    # Note, no update method supplied so state is just copied to $scope
+    Fe.dress(@$scope,'today')
+
+    @$scope.doClick = @uiActions.changeState
 
 app.controller 'fe.example.appController', FeExampleController
 
@@ -57,4 +66,5 @@ app.controller 'fe.example.appController', FeExampleController
 app.config ['FeProvider', 'fe.example.treeSource', (FeProvider, treeConfig) ->
   console.log('Config %O %O',FeProvider, treeConfig)
   FeProvider.setTreeConfig(treeConfig)
+  FeProvider.setTemplateRoot('/templates/')
 ]

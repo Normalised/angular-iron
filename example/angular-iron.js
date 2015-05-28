@@ -6,8 +6,9 @@
   mod = angular.module('angular-iron', []);
 
   Fe = (function() {
-    function Fe(tree1) {
+    function Fe(tree1, templateRoot1) {
       this.tree = tree1;
+      this.templateRoot = templateRoot1;
       this.dress = bind(this.dress, this);
     }
 
@@ -20,21 +21,27 @@
   })();
 
   mod.provider('Fe', function() {
-    var config;
+    var config, templateRoot;
     config = {
       data: {},
       options: {}
     };
+    templateRoot = '';
     this.setTreeConfig = (function(_this) {
       return function(cfg) {
         return config = cfg;
       };
     })(this);
+    this.setTemplateRoot = (function(_this) {
+      return function(root) {
+        return templateRoot = root;
+      };
+    })(this);
     this.$get = [
       'baobab', function(baobab) {
-        var stateTree;
+        var fe, stateTree;
         stateTree = baobab.create(config.data, config.options);
-        return new Fe(stateTree);
+        return fe = new Fe(stateTree, templateRoot);
       }
     ];
     return this;
@@ -49,9 +56,13 @@
       } else {
         this.renderMethod = (function(_this) {
           return function(state) {
-            return _.forIn(state, function(value, key) {
-              return $scope[key] = value;
-            });
+            var key, results, value;
+            results = [];
+            for (key in state) {
+              value = state[key];
+              results.push($scope[key] = value);
+            }
+            return results;
           };
         })(this);
       }
@@ -85,25 +96,35 @@
         restrict: 'AE',
         scope: {},
         link: function(scope, element, attrs) {
-          var render;
+          var facetName, render;
           console.log('Link Fe.Shirt', scope, element, attrs);
-          if (!attrs.path) {
-            console.error('path attribute must be supplied', scope, element, attrs);
+          facetName = attrs.path || attrs.feShirt;
+          if (!facetName) {
+            console.error('facet / cursor name must be supplied', scope, element, attrs);
           }
           render = function(state) {
-            return _.forIn(state, function(value, key) {
-              return scope[key] = value;
-            });
+            var key, results, value;
+            results = [];
+            for (key in state) {
+              value = state[key];
+              results.push(scope[key] = value);
+            }
+            return results;
           };
-          return Fe.dress(scope, attrs.path, render);
+          return Fe.dress(scope, facetName, render);
         },
         templateUrl: function(element, attrs) {
+          var templateName;
           console.log('Template Fe.Shirt', element, attrs);
-          if (!attrs.template) {
-            console.error('template attribute must be supplied', element, attrs);
-            return '';
+          templateName = attrs.template || attrs.path || attrs.feShirt;
+          if (!templateName) {
+            console.error('No template or path attribute supplied');
+            throw new Error();
           }
-          return attrs.template;
+          if (templateName.indexOf('html') === -1) {
+            templateName += '.html';
+          }
+          return Fe.templateRoot + templateName;
         }
       };
     }
@@ -133,7 +154,6 @@
       tree = new Baobab(tree, options);
       timeoutFn = (function(_this) {
         return function() {
-          console.log('Apply Root Scope');
           return _this.$rootScope.$apply();
         };
       })(this);

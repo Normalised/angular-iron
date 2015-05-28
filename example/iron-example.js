@@ -6,17 +6,27 @@
 
   app.constant('fe.example.treeSource', {
     data: {
-      a: 'Waiting for a click...',
-      b: 'Some Other Data'
+      currentDate: 'Dont know yet. Click the button',
+      theWeather: 'Its raining.',
+      username: 'Normalised'
     },
     options: {
       facets: {
-        facetA: {
+        today: {
           cursors: {
-            foo: ['a'],
-            bar: ['b']
+            date: ['currentDate'],
+            weather: ['theWeather']
           },
           get: function(data) {
+            return data;
+          }
+        },
+        userProfile: {
+          cursors: {
+            name: ['username']
+          },
+          get: function(data) {
+            data.name = "Mr." + data.name;
             return data;
           }
         }
@@ -31,7 +41,7 @@
       this.log = log;
       this.changeState = bind(this.changeState, this);
       this.log.log('Create Example Actions');
-      this.cursor = Fe.tree.select('a');
+      this.cursor = Fe.tree.select('currentDate');
     }
 
     FeExampleActions.prototype.changeState = function() {
@@ -54,17 +64,10 @@
       this.$scope = $scope;
       this.uiActions = uiActions;
       this.log = log;
-      this.render = bind(this.render, this);
       this.log.log('Create Example Controller');
-      Fe.dress(this.$scope, 'facetA', this.render);
+      Fe.dress(this.$scope, 'today');
       this.$scope.doClick = this.uiActions.changeState;
     }
-
-    FeExampleController.prototype.render = function(state) {
-      this.log.log('Render State', state);
-      this.$scope.foo = state.foo;
-      return this.$scope.bar = state.bar;
-    };
 
     return FeExampleController;
 
@@ -75,7 +78,8 @@
   app.config([
     'FeProvider', 'fe.example.treeSource', function(FeProvider, treeConfig) {
       console.log('Config %O %O', FeProvider, treeConfig);
-      return FeProvider.setTreeConfig(treeConfig);
+      FeProvider.setTreeConfig(treeConfig);
+      return FeProvider.setTemplateRoot('/templates/');
     }
   ]);
 
