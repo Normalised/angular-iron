@@ -60,7 +60,9 @@ class IronShirt
 mod.directive 'feShirt', ['Fe', (Fe) ->
   return {
     restrict: 'AE'
-    scope: {}
+    scope: {
+      actions: '='
+    }
     link: (scope, element, attrs) ->
       console.log('Link Fe.Shirt', scope, element, attrs)
       facetName = attrs.path || attrs.feShirt

@@ -6,7 +6,7 @@ app = angular.module 'fe.example', [
 app.constant 'fe.example.treeSource', {
   data: {
     currentDate: 'Dont know yet. Click the button'
-    theWeather: 'Its raining.'
+    theWeather: 'raining'
     username: 'Normalised'
   }
   options: {
@@ -19,7 +19,10 @@ app.constant 'fe.example.treeSource', {
         }
         get: (data) ->
           # You can manipulate the data however you like here
-          return data
+          return {
+            date: data.date
+            weather: "It's " + data.weather + " right now."
+          }
       }
       userProfile: {
         cursors: {
@@ -39,12 +42,18 @@ class FeExampleActions
   @$inject: ['Fe','$log']
   constructor: (Fe, @log) ->
     @log.log('Create Example Actions')
-    @cursor = Fe.tree.select('currentDate')
+    @dateCursor = Fe.tree.select('currentDate')
+    @weatherCursor  = Fe.tree.select('theWeather')
 
-  changeState: () =>
-    @log.log('Change state')
+  refreshDate: () =>
+    @log.log('Refresh Date')
     now = new Date()
-    @cursor.set(now.toString())
+    @dateCursor.set(now.toString())
+
+  changeWeather: () =>
+    @log.log('Change Weather')
+    choices = ["raining","sunny","a bit windy","very cold"]
+    @weatherCursor.set(choices[Math.floor(Math.random() * choices.length)])
 
 app.service 'fe.example.actions', FeExampleActions
 
@@ -58,7 +67,7 @@ class FeExampleController
     # Note, no update method supplied so state is just copied to $scope
     Fe.dress(@$scope,'today')
 
-    @$scope.doClick = @uiActions.changeState
+    @$scope.actions = @uiActions
 
 app.controller 'fe.example.appController', FeExampleController
 

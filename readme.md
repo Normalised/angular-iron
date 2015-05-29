@@ -125,7 +125,7 @@ Iron Shirt Directive
 --------------------
 
 Finally, there is a preliminary implementation of a generic directive 'fe-shirt' which can be used if your directive 
-template only uses data straight from state and doesn't do anything else like invoking actions.
+template only requires data from the state tree. 
 
 The simplest form for fe-shirt is :
 
@@ -149,6 +149,29 @@ Both the data path and template can be configured separately via the path and te
 If the template attribute is not supplied the path attribute is checked and then the fe-shirt attribute.
 
 NOTE : If any setting for template doesnt contain .html it will be appended to the template name
+
+The directive also exposes an 'action' scope binding which can be used to pass in an action set
+
+```html
+<div fe-shirt path="someData" template="someTemplate" actions="actionSet">
+```
+
+Then given an action set like
+```CoffeeScript
+class ActionSet
+  blowHorn: () =>
+    # Action Code
+```
+
+And someData ```{username:'John Coltrane'}``` then someTemplate.html can do this 
+  
+```html
+<div>
+  <p>{{username}}<p><input type="submit" ng-click="actions.blowHorn()">
+</div>
+```
+
+All of this is demonstrated by the code in the example.
 
 Running the example
 -------------------

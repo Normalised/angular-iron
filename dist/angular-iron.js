@@ -94,7 +94,9 @@
     'Fe', function(Fe) {
       return {
         restrict: 'AE',
-        scope: {},
+        scope: {
+          actions: '='
+        },
         link: function(scope, element, attrs) {
           var facetName, render;
           console.log('Link Fe.Shirt', scope, element, attrs);
